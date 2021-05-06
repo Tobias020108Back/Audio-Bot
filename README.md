@@ -27,5 +27,5 @@
 	
 
 # audio-bot v1.0.0
-
+- By Corrupt
 ![](https://i.ibb.co/82nXS5g/8878438ae9ba96d53f67f5dc34e67fce.png)
