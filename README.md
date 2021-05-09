@@ -26,6 +26,7 @@
 	``sudo apt install nodejs npm``
 	
 
-# audio-bot v1.0.0
+### audio-bot v1.0.0
+- Made by Corrupt
 
 ![](https://i.ibb.co/82nXS5g/8878438ae9ba96d53f67f5dc34e67fce.png)
