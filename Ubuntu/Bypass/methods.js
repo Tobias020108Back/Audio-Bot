@@ -30,7 +30,7 @@ function MKVMP3_Method(msg) {
                                 msg.member.send({ embed: embed });
                                 msg.member.send({ files: [output] });
                                 msg.reply('Sent the bypass to your dms :)');
-                                setTimeout(() => { _exec(`rm -rf ${A} ${B} ${output}`, () => { console.log('Deleted All Files'); }); }, 15000);
+                                setTimeout(() => { _exec(`rm -rf "${A}" "${B}" "${output}"`, () => { console.log('Deleted All Files'); }); }, 15000);
                             });
                         });
                     });

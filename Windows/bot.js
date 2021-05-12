@@ -5,6 +5,7 @@ const talkedRecently = new Set();
 const bypassMethods = require('./Bypass/methods.js');
 const { Compress } = require('./Compress/Compress.js');
 const { MakeBait } = require('./MakeBait/MakeBait.js');
+const { getFileInfo } = require('./FileInfo/FileInfo.js');
 const { Options, Token, Prefix } = require('./config.json');
 
 function bytesToSize(bytes) {
@@ -22,6 +23,7 @@ function millisToMinutesAndSeconds(millis) {
 };
 
 client.on("message", async function (msg) {
+
 	let body = msg.content.split(" ");
 	var whitelistedChannel = false;
 	if (Options['Channels'].length > 0) {
@@ -36,6 +38,7 @@ client.on("message", async function (msg) {
 	if (!whitelistedChannel) {
 		return
 	};
+
 	if (body[0] === `${Prefix}bypass`) {
 		if (msg.attachments.size > 0) {
 			if (bytesToSize(msg.attachments.array()[0].size) == 'n/a') {
@@ -90,6 +93,7 @@ client.on("message", async function (msg) {
 			msg.reply('No file attached!')
 		}
 	};
+
 	if (body[0] === `${Prefix}compress`) {
 		if (msg.attachments.size > 0) {
 			if (bytesToSize(msg.attachments.array()[0].size) == 'n/a') {
@@ -150,6 +154,7 @@ client.on("message", async function (msg) {
 			msg.reply('No file attached!')
 		}
 	};
+
 	if (body[0] === `${Prefix}makebait`) {
 		if (msg.attachments.size > 0) {
 			if (bytesToSize(msg.attachments.array()[0].size) == 'n/a') {
@@ -204,6 +209,28 @@ client.on("message", async function (msg) {
 			msg.reply('No file attached!')
 		};
 	};
+
+	if(body[0] === `${Prefix}fileinfo`) {
+		if (msg.attachments.size > 0) {
+			if (bytesToSize(msg.attachments.array()[0].size) == 'n/a') {
+				return msg.reply('File has no data.');
+			};
+			if (bytesToSize(msg.attachments.array()[0].size).split(' ')[1] != 'KB' && parseInt(bytesToSize(msg.attachments.array()[0].size).split(' ')[0]) > 7) {
+				return msg.reply('File too large.');
+			};
+			if (talkedRecently.has(msg.author.id)) {
+				return msg.reply(`Wait ${millisToMinutesAndSeconds(Options['Timeout'])} before doing another command.`);
+			};
+			getFileInfo(msg)
+			talkedRecently.add(msg.author.id);
+			setTimeout(() => {
+				talkedRecently.delete(msg.author.id);
+			}, Options['Timeout']);
+		} else {
+			msg.reply('No file attached!');
+		};
+	};
+
 	if (body[0] === `${Prefix}cmds` || body[0] === `${Prefix}commands`|| body[0] === `${Prefix}cmd`) {
 		msg.channel.send({
 			embed: {
@@ -225,12 +252,17 @@ client.on("message", async function (msg) {
 					},
 					{
 						name: `${Prefix}makebait`,
-						value: "Turns your inputted file into a bait for method A"
+						value: "Turns your inputted file into a bait for method A."
+					},
+					{
+						name: `${Prefix}fileinfo`,
+						value: `Gives you "Important" information about the file.`
 					}
 				]
 			}
 		});
 	};
+
 });
 
 client.on('ready', () => {

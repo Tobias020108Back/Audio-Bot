@@ -3,6 +3,7 @@
 - Roblox audio method(s).
 - Roblox audio bait maker
 - Audio compression.
+- Audio file information.
 - Ubuntu / Windows versions.
 - Fully open source.
 
